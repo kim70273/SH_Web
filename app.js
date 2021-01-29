@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 /* 라우터 부분(나중에 따로 생성) */
 const pageRouter = require('./routes/page');
+const { sequelize } = require('./models');
 
 const app = express();
 app.set('port', process.env.PORT || 8001);
@@ -20,6 +21,14 @@ nunjucks.configure('views', {
     express: app,
     watch: true,
 });
+sequelize.sync({force: false})//서버 연결하면서 시퀄라이즈 연결
+.then(()=>{//force: true하면 테이블 수정 되면서 기존 데이터 날아갈 수 있음.
+    console.log('데이터베이스 연결 성공');
+})
+.catch((err) => {
+    console.log(err);
+});//시퀄라이즈 싱크는 프로미스이기때문에 then, catch 붙여주면 좋다.
+//npm start하면 테이블들이 생성됨. 만약 생성안된다면 오타를 확인.
 
 /* 6장 */
 app.use(morgan('dev'));
