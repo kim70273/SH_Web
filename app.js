@@ -10,6 +10,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 /* 라우터 부분(나중에 따로 생성) */
 const pageRouter = require('./routes/page');
+const authRouter = require('./routes/auth');
 const { sequelize } = require('./models');
 
 const app = express();
@@ -48,6 +49,7 @@ app.use(session({
 
 /* 페이지라우터 연결 */
 app.use('/',pageRouter);
+app.use('/auth',authRouter)
 
 /* 찾는 것이 없을 때. 404처리 미들웨어   */
 app.use((req, res, next) => {
