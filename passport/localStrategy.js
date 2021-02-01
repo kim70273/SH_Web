@@ -1,3 +1,4 @@
+/* 이메일과 비밀번호로 로그인 */
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
@@ -7,7 +8,7 @@ const User = require('../models/user');
 module.exports = () => {
   passport.use(new LocalStrategy({
     usernameField: 'email', //req.body.email
-    passwordField: 'password',//req,body.password
+    passwordField: 'password',//req,body.password 요청보낸것과 이름 일치해야됨.
   }, async (email, password, done) => {
     try {
       const exUser = await User.findOne({ where: { email } });

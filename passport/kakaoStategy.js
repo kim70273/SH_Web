@@ -1,3 +1,4 @@
+/* 카카오로 로그인 */
 const passport = require('passport');
 const KakaoStrategy = require('passport-kakao').Strategy;
 

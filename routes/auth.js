@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 // const passport = require('passport');
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 // const {isLoggedIn, isNotLoggedIn} = require('./middlewares');
 const User = require('../models/user');
 
@@ -24,8 +24,8 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
             email,
             nick,
             password: hash,//비밀 번호는 해시화 해서 저장
-        });
-        return res.redirect('/');//메인 페이지로
+        });//유저를 생성 후.
+        return res.redirect('/');//메인 페이지로(회원가입 완료.)
     } catch(error){
         console.error(error);
         return next(error);
@@ -33,11 +33,12 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
 });
 
 //로그인 할때는 카카오 로그인 할때랑 이메일 비밀번호로 로그인 할때랑
-//달라짐 . 로직이 복잡해질 수 있으니 간편하게 하기위해 passport라는 
+//달라짐 . (세션문제도 있음) 로직이 복잡해질 수 있으니 간편하게 하기위해 passport라는 
 //라이브러리를 사용. (코드가 깔끔 해짐.)
 
 router.post('/login', (req, res, next) => {
-    passport.authenticate('local', (authError, user, info) => {
+    //passport.authenticate도 미들웨어다.
+    passport.authenticate('local', (authError, user, info) => {//(done함수 호출되면 다시 여기로옴!!)
         //local이 실행 되면 패스포트가 localStrategy를 찾는다.
         //passport 폴더안에 local을 localStrategy로 등록해놨음.
         //done을 호출했을때 실행 됨.
@@ -51,13 +52,13 @@ router.post('/login', (req, res, next) => {
         return req.login(user, (loginError) => {
             //req.login으로 사용자 객체를 넣어줌
             //passport index의 serializeUser가 실행됨
-            //다시 done되면 돌아와서/
+            //다시 done되면 다시 여기로 돌아와서/
             if(loginError){
                 console.error(loginError);
                 return next(loginError);
             }
             return res.redirect('/');//로그인 성공하면 메인 페이지로
-            //세션 쿠키를 브라우저로 보내줌.
+            //'세션 쿠키'를 브라우저로 보내줌. redirect로 돌아간 순간 세션쿠키가 브라우저로 저장됨
             //로그인된 상태가 되어 서버가 누가 요청 했는지 알게 됨.
         });
     })(req, res, next);//미들웨어를 확장하는 패턴
@@ -66,7 +67,7 @@ router.post('/login', (req, res, next) => {
 router.get('/logout', isLoggedIn, (req, res) => {
     req.logout();//세션 쿠키가 사라짐. -> 로그인이 풀린것
     req.session.destroy();
-    res.redirect('/');
+    res.redirect('/');//로그아웃이된 상태.
 });
 
 module.exports = router;
