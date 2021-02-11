@@ -6,7 +6,7 @@ const User = require('../models/user');
 module.exports = () => {
     passport.serializeUser((user, done) => {
         done(null, user.id);//세션에 user의 id만 저장(서버 메모리가 한정 되어있으므로)
-        //실무에서는 메모리에 저장하면 안됨.
+        //실무에서는 메모리에 저장하면 안됨. 사용자가 수억명이면 용량을 못 버팀
     });
 
     passport.deserializeUser((id, done) => {//(세션)id만 가지고있다가

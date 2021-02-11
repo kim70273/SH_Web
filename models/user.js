@@ -14,7 +14,7 @@ module.exports = class User extends Sequelize.Model{//클래스가 모델이 된
             },
             password: {
                 type: Sequelize.STRING(100),//해시화 될때 길게 됨
-                allowNull: true,//카카오 로그인등
+                allowNull: true,//카카오 로그인등일 때 비밀번호가 없을 수도 있다.
             },
             provider:{
                 type: Sequelize.STRING(10),
@@ -28,12 +28,12 @@ module.exports = class User extends Sequelize.Model{//클래스가 모델이 된
             },
         }, {
             sequelize,
-            timestamps: true,
+            timestamps: true,//생성일, 수정일
             underscored: false,
             modelName: 'User',
             tableName: 'users',
             paranoid: true,//생성일 수정일 삭제일이 기록됨.
-            charset: 'utf8',
+            charset: 'utf8',//한글 지원되도록.
             collate: 'utf8_general_ci',
         });
     }
@@ -44,7 +44,7 @@ module.exports = class User extends Sequelize.Model{//클래스가 모델이 된
         db.User.belongsToMany(db.User, {
             foreignkey: 'followingId',
             as: 'Followers',//3번 followingId의 팔로워들을 가져올 수 있도록.
-            through: 'Follow',
+            through: 'Follow',//중간 테이블
         });
         db.User.belongsToMany(db.User, {
             foreignkey: 'followerId',//내 아이디로 검색해서 팔로잉을 알 수 있다.

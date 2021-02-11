@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "kim70273",
-    "password": "kms0208235@@",
+    "username": "root",
+    "password": "kms0208235@@K",
     "database": "sh_web",
     "host": "127.0.0.1",
     "dialect": "mysql"
