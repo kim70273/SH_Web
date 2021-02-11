@@ -28,7 +28,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) => {
         return res.redirect('/');//메인 페이지로(회원가입 완료.)
     } catch(error){
         console.error(error);
-        return next(error);
+        return next(error);//
     }
 });
 
