@@ -13,6 +13,7 @@ dotenv.config();//설정값들이 이 이후로 들어감/ process.env.COOKIE_SE
 /* 라우터 부분(나중에 따로 생성) */
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
+const postRouter = require('./routes/post');
 const { sequelize } = require('./models');
 
 const passportConfig = require('./passport');//passport 작성한것과 연결해주기위해
@@ -40,8 +41,11 @@ passportConfig();
 /* 6장 */
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/img',express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true}));//바디 파서가 폼 데이터 url encoded인것 해석
+//req.body.emeil 같은 것으로 바꿔 줌.
+//enctype이 multipart/form-data인 것은 못 바꿔줌 -> multer써야 됨
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
     resave: false,
@@ -65,7 +69,8 @@ app.use(passport.session());
 
 /* 페이지라우터 연결 */
 app.use('/',pageRouter);
-app.use('/auth',authRouter)
+app.use('/auth',authRouter);
+app.use('/post',postRouter);
 
 /* 찾는 것이 없을 때. 404처리 미들웨어   */
 app.use((req, res, next) => {
