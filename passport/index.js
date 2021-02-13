@@ -11,7 +11,18 @@ module.exports = () => {
 
     passport.deserializeUser((id, done) => {//(세션)id만 가지고있다가
         //필요할때 정보를 복구
-        User.findOne({where: {id}})
+        User.findOne({
+            where: { id },
+      include: [{
+        model: User,
+        attributes: ['id', 'nick'],
+        as: 'Followers',
+      }, {
+        model: User,
+        attributes: ['id', 'nick'],
+        as: 'Followings',
+      }],//팔로잉과 팔로워 부분을 만들어줌.
+        })
         .then(user => done(null, user))
         .catch(err => done(err));
     });

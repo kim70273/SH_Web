@@ -14,6 +14,7 @@ dotenv.config();//설정값들이 이 이후로 들어감/ process.env.COOKIE_SE
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 const { sequelize } = require('./models');
 
 const passportConfig = require('./passport');//passport 작성한것과 연결해주기위해
@@ -71,6 +72,7 @@ app.use(passport.session());
 app.use('/',pageRouter);
 app.use('/auth',authRouter);
 app.use('/post',postRouter);
+app.use('/user',userRouter);
 
 /* 찾는 것이 없을 때. 404처리 미들웨어   */
 app.use((req, res, next) => {

@@ -6,9 +6,9 @@ const router = express.Router();
 router.use((req, res, next) => {
     res.locals.user = req.user; //모두 req.user들어가도록
     //같은 변수를 모든 라우터에 다 넣는 경우.
-    res.locals.followerCount = 0;
-    res.locals.followingCount = 0;
-    res.locals.followerIdList = [];
+    res.locals.followerCount = req.user ? req.user.Followers.length : 0;//로그인한 경우
+    res.locals.followingCount = req.user ? req.user.Followings.length : 0;
+    res.locals.followerIdList = req.user ? req.user.Followings.map(f => f.id) : [];//팔로우한 사람 안 한사람 구분하기 위해 가지고있음.
     next();
 });
 
@@ -21,7 +21,7 @@ router.get('/join', (req, res) => {
     res.render('join', {title: '회원가입 - SH_Web'});
 });
 
-//메인 페이지. 페이지들은 views에 만드렁 준다. (실무에서는 넌적스보단 리액트나 뷰 같은 것을 씀.)
+//메인 페이지. 페이지들은 views에 만들어 준다. (실무에서는 넌적스보단 리액트나 뷰 같은 것을 씀.)
 //프론트에서 백엔드로 보내는 요청을 중심적으로 본다!
 router.get('/', async (req, res, next) =>{
     try {
